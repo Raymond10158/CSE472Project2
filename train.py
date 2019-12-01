@@ -12,6 +12,9 @@ all_real = []
 all_fake = []
 all_real_list = []
 all_fake_list = []
+real = {}
+fake = {}
+
 data1 = pd.read_csv('train.csv', usecols = ['title1_zh'])
 data2 = pd.read_csv('train.csv', usecols = ['title2_zh'])
 
@@ -22,21 +25,28 @@ for i in range(0, 1):
     all_real.append(real_data)
     all_fake.append(fake_data)
 
+with open('stopwords.txt') as f:
+    stopWords = [line.strip().decode('utf-8') for line in f.readlines()]
+
 for real in all_real:
-    real_list = [word for word in jieba.cut(real)]
-    all_real_list.append(real_list)
+    real_list = [word for word in jieba.cut(real, cut_all = False) ]
+    all_real_list.extend(real_list)
+
 
 for fake in all_fake:
-    fake_list = [word for word in jieba.cut(fake)]
-    all_fake_list.append(fake_list)
+    fake_list = [word for word in jieba.cut(fake, cut_all = False)]
+    all_fake_list.extend(fake_list)
 
 
 print(all_real_list)
 print(all_fake_list)
 
-    
-with open("real.txt", 'w') as output:
-    for row in real:
-        output.write(str(row))
+temp = set(all_real_list)
+all_real_list_copy = list(temp)
+
+print(all_real_list_copy)
+
+
+
 
 
